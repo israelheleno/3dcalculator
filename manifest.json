@@ -1,7 +1,7 @@
 {
-  "name": "Calculadora 3D Pro",
-  "short_name": "Calc3D Pro",
-  "description": "Precificação de impressão 3D com taxas de marketplace",
+  "name": "3D Calculator Pro",
+  "short_name": "3D Calc Pro",
+  "description": "3D printing cost calculator with marketplace fees",
   "start_url": "/3dcalculator/",
   "scope": "/3dcalculator/",
   "display": "standalone",
@@ -17,6 +17,12 @@
       "src": "/3dcalculator/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/3dcalculator/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
-} 
+}
