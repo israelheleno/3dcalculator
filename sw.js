@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calc3d-v3.3';
+const CACHE_NAME = 'calc3d-v3.3.1';
 const urlsToCache = [
   '/3dcalculator/',
   '/3dcalculator/index.html',
@@ -20,9 +20,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.map(key => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
-        }
+        if (key !== CACHE_NAME) return caches.delete(key);
       }))
     )
   );
