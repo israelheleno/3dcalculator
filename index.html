@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Calculadora 3D Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧵 Calculadora 3D Pro</h1>
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="calc">Calculadora</button>
+        <button class="tab-btn" data-tab="history">Histórico</button>
+      </nav>
+    </header>
+
+    <!-- Aba Calculadora -->
+    <section id="calc-tab" class="tab-content active">
+      <div class="card">
+        <h2>📦 Produto & Filamento</h2>
+        <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Caixinha de figurinha"></label>
+        <label>Peso da peça (g): <input type="number" id="peso" value="50" step="0.1"></label>
+        <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1"></label>
+        <label>Preço do filamento (R$/kg): <input type="number" id="precoFilamento" value="80.00" step="0.01"></label>
+      </div>
+
+      <div class="card">
+        <h2>⚡ Energia</h2>
+        <label>Preço do kWh (R$): <input type="number" id="precoKwh" value="0.93" step="0.01"></label>
+        <label>Potência de pico (W): <input type="number" id="potenciaPico" value="1250"></label>
+        <label>Duração do pico (min): <input type="number" id="duracaoPico" value="10"></label>
+        <label>Potência sustentada (W): <input type="number" id="potenciaSustentada" value="200"></label>
+      </div>
+
+      <div class="card">
+        <h2>⏱️ Tempos de Impressão</h2>
+        <label>Tempo individual (h): <input type="number" id="tempoIndividual" value="3.433" step="0.001"></label>
+        <label>Tempo total do lote (h): <input type="number" id="tempoLoteTotal" value="12.933" step="0.001"></label>
+        <label>Peças no lote: <input type="number" id="qtdLote" value="4" min="1"></label>
+        <p class="info">💡 O custo de energia por peça no lote será rateado.</p>
+      </div>
+
+      <div class="card">
+        <h2>💰 Precificação</h2>
+        <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1"></label>
+        <label>Modo de produção:
+          <select id="modoProducao">
+            <option value="individual">Individual</option>
+            <option value="lote">Lote (mais econômico)</option>
+          </select>
+        </label>
+        <h3>Taxas dos canais</h3>
+        <div class="taxas-grid">
+          <div>
+            <strong>🏪 Venda Direta</strong>
+            <label>Taxa (%): <input type="number" id="taxaDireta" value="0" step="0.1" disabled></label>
+            <label>Fixo (R$): <input type="number" id="fixoDireta" value="0" step="0.01" disabled></label>
+          </div>
+          <div>
+            <strong>🟡 Mercado Livre</strong>
+            <label>Comissão (%): <input type="number" id="taxaML" value="11.5" step="0.1"></label>
+            <label>Taxa fixa (R$): <input type="number" id="fixoML" value="5.00" step="0.01"></label>
+          </div>
+          <div>
+            <strong>🟠 Shopee</strong>
+            <label>Comissão (%): <input type="number" id="taxaShopee" value="12" step="0.1"></label>
+            <label>Taxa fixa (R$): <input type="number" id="fixoShopee" value="4.00" step="0.01"></label>
+          </div>
+        </div>
+      </div>
+
+      <button id="calcularBtn">📊 Calcular</button>
+
+      <div id="resultados" class="resultados oculto">
+        <h2>📈 Resultados</h2>
+        <div class="grid-resultados">
+          <div class="resumo">
+            <h3>🧾 Custo por peça</h3>
+            <p>Filamento: R$ <span id="custoFilamento">0.00</span></p>
+            <p>Energia (modo escolhido): R$ <span id="custoEnergia">0.00</span></p>
+            <p><strong>Total: R$ <span id="custoTotalPeca">0.00</span></strong></p>
+          </div>
+          <div class="resumo">
+            <h3>⚡ Consumo de energia</h3>
+            <p>Individual: <span id="consumoIndividual">0.000</span> kWh</p>
+            <p>Lote (por peça): <span id="consumoLote">0.000</span> kWh</p>
+            <p>Economia lote: <span id="economiaLote"></span></p>
+          </div>
+          <div class="resumo destaque">
+            <h3>💲 Preços sugeridos</h3>
+            <div id="precosCanais"></div>
+          </div>
+        </div>
+        <button id="salvarHistoricoBtn" class="btn-secundario">💾 Salvar no histórico</button>
+      </div>
+    </section>
+
+    <!-- Aba Histórico -->
+    <section id="history-tab" class="tab-content">
+      <div class="card">
+        <h2>📋 Histórico de cálculos</h2>
+        <div id="historicoLista"></div>
+        <button id="limparHistoricoBtn" class="btn-perigo">🗑️ Limpar histórico</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
