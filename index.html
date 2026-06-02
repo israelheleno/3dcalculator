@@ -41,21 +41,25 @@
 
       <div class="card">
         <h2>⏱️ Tempos de Impressão</h2>
-        <label>Tempo individual (h): <input type="number" id="tempoIndividual" value="3.433" step="0.001"></label>
-        <label>Tempo total do lote (h): <input type="number" id="tempoLoteTotal" value="12.933" step="0.001"></label>
-        <label>Peças no lote: <input type="number" id="qtdLote" value="4" min="1"></label>
-        <p class="info">💡 O custo de energia por peça no lote será rateado.</p>
+        <label>Modo de produção:
+          <select id="modoProducao">
+            <option value="individual">Individual (uma peça por vez)</option>
+            <option value="lote">Em lote (várias peças juntas)</option>
+          </select>
+        </label>
+        <div id="tempoIndividualContainer">
+          <label>Tempo total da peça (hh:mm): <input type="text" id="tempoIndividualStr" value="3:26" placeholder="h:mm"></label>
+        </div>
+        <div id="tempoLoteContainer" style="display:none;">
+          <label>Quantidade de peças no lote: <input type="number" id="qtdLote" value="4" min="2"></label>
+          <label>Tempo total do lote (hh:mm): <input type="text" id="tempoLoteTotalStr" value="12:56" placeholder="h:mm"></label>
+          <p class="info">⏱️ Tempo médio por peça: <strong><span id="tempoMedioLote">0:00</span></strong></p>
+        </div>
       </div>
 
       <div class="card">
         <h2>💰 Precificação</h2>
         <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1"></label>
-        <label>Modo de produção:
-          <select id="modoProducao">
-            <option value="individual">Individual</option>
-            <option value="lote">Lote (mais econômico)</option>
-          </select>
-        </label>
         <h3>Taxas dos canais</h3>
         <div class="taxas-grid">
           <div>
@@ -111,6 +115,13 @@
       </div>
     </section>
   </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <span>&copy; 2026 Desenvolvido por <strong>Israel Heleno de Castro</strong></span>
+      <span class="versao">V 3.0</span>
+    </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>
