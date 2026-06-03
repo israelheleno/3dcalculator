@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace">
+  <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace e análise reversa de lucro">
   <meta name="theme-color" content="#0f172a">
-  <!-- Caminho absoluto ajustado para o repositório -->
   <link rel="manifest" href="/3dcalculator/manifest.json">
   <link rel="icon" href="/3dcalculator/icon-192.png">
   <link rel="apple-touch-icon" href="/3dcalculator/icon-192.png">
-  <title>Calculadora 3D Pro</title>
+  <title>3D Calculator Pro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🧵 Calculadora 3D Pro</h1>
+      <h1>🧵 3D Calculator Pro</h1>
       <nav class="tabs">
         <button class="tab-btn active" data-tab="calc">Calculadora</button>
+        <button class="tab-btn" data-tab="reverso">Reverso</button>
         <button class="tab-btn" data-tab="history">Histórico</button>
       </nav>
     </header>
 
     <!-- Aba Calculadora -->
     <section id="calc-tab" class="tab-content active">
+      <!-- Conteúdo da calculadora exatamente como já estava -->
       <div class="card">
         <h2>📦 Produto & Filamento</h2>
         <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Caixinha de figurinha"></label>
@@ -107,6 +108,67 @@
       </div>
     </section>
 
+    <!-- Aba Reverso (NOVA) -->
+    <section id="reverso-tab" class="tab-content">
+      <div class="card">
+        <h2>🛒 Condições de Venda</h2>
+        <label>Canal de venda:
+          <select id="revCanal">
+            <option value="direta">Venda Direta</option>
+            <option value="ml">Mercado Livre</option>
+            <option value="shopee">Shopee</option>
+          </select>
+        </label>
+        <label>Preço de venda (R$): <input type="number" id="revPrecoVenda" value="29.90" step="0.01"></label>
+        <div class="taxas-grid">
+          <div>
+            <strong>Taxa do canal</strong>
+            <label>Comissão (%): <input type="number" id="revTaxaPercent" value="11.5" step="0.1"></label>
+            <label>Taxa fixa (R$): <input type="number" id="revTaxaFixa" value="5.00" step="0.01"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>⚙️ Custo de Produção</h2>
+        <label>Peso da peça (g): <input type="number" id="revPeso" value="50" step="0.1"></label>
+        <label>Desperdício (%): <input type="number" id="revDesperdicio" value="10" step="0.1"></label>
+        <label>Preço do filamento (R$/kg): <input type="number" id="revPrecoFilamento" value="80.00" step="0.01"></label>
+        <label>Tempo de impressão (hh:mm): <input type="text" id="revTempoStr" value="3:26" placeholder="h:mm"></label>
+        <label>Preço do kWh (R$): <input type="number" id="revPrecoKwh" value="0.93" step="0.01"></label>
+        <label>Potência de pico (W): <input type="number" id="revPotenciaPico" value="1250"></label>
+        <label>Duração do pico (min): <input type="number" id="revDuracaoPico" value="10"></label>
+        <label>Potência sustentada (W): <input type="number" id="revPotenciaSustentada" value="200"></label>
+      </div>
+
+      <button id="calcularReversoBtn">🔄 Calcular Reverso</button>
+
+      <div id="resultadosReverso" class="resultados oculto">
+        <h2>📊 Análise de Lucratividade</h2>
+        <div class="grid-resultados">
+          <div class="resumo reverso-resumo">
+            <h3>🧾 Custo de Produção</h3>
+            <p>Filamento: R$ <span id="revCustoFilamento">0.00</span></p>
+            <p>Energia: R$ <span id="revCustoEnergia">0.00</span></p>
+            <p><strong>Total: R$ <span id="revCustoTotal">0.00</span></strong></p>
+          </div>
+          <div class="resumo reverso-resumo">
+            <h3>🛒 Venda</h3>
+            <p>Preço de venda: R$ <span id="revPrecoVendaDisplay">0.00</span></p>
+            <p>Taxas: R$ <span id="revTaxasCobradas">0.00</span></p>
+            <p><strong>Valor líquido: R$ <span id="revValorLiquido">0.00</span></strong></p>
+          </div>
+          <div class="resumo destaque reverso-destaque" id="revIndicadorBloco">
+            <h3 id="revIndicadorTitulo">📈 Resultado</h3>
+            <p><strong>Lucro: R$ <span id="revLucroLiquido">0.00</span></strong></p>
+            <p>Margem: <span id="revMargemLucro">0.00</span>%</p>
+            <p id="revValePena"></p>
+          </div>
+        </div>
+        <button id="salvarHistoricoReversoBtn" class="btn-secundario reverso-salvar">💾 Salvar no histórico</button>
+      </div>
+    </section>
+
     <!-- Aba Histórico -->
     <section id="history-tab" class="tab-content">
       <div class="card">
@@ -119,8 +181,8 @@
 
   <footer class="footer">
     <div class="footer-content">
-      <span>&copy; 2026 Desenvolvido por <strong>IHC Solutions</strong></span>
-      <span class="versao">V 4.0</span>
+      <span>&copy; 2026 <strong>IHC Solutions</strong></span>
+      <span class="versao">V 4.1</span>
     </div>
   </footer>
 
