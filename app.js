@@ -98,32 +98,28 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ---------- CÁLCULO (Calculadora) ----------
 document.getElementById('calcularBtn').addEventListener('click', () => {
-  // Filamento
   const peso = parseFloatSafe(document.getElementById('peso').value);
   const desperdicio = parseFloatSafe(document.getElementById('desperdicio').value) / 100;
   const precoFilamento = parseFloatSafe(document.getElementById('precoFilamento').value);
   const pesoFinal = peso * (1 + desperdicio);
   const custoFilamento = (pesoFinal / 1000) * precoFilamento;
 
-  // Energia
   const precoKwh = parseFloatSafe(document.getElementById('precoKwh').value);
   const pico = parseFloatSafe(document.getElementById('potenciaPico').value);
   const duracaoPico = parseFloatSafe(document.getElementById('duracaoPico').value);
   const sustentada = parseFloatSafe(document.getElementById('potenciaSustentada').value);
 
   const modo = modoSelect.value;
-  let tempoHoras = 0;
-  let qtdLote = 1;
   let custoEnergiaEscolhido = 0;
   let consumoIndividual = 0;
   let consumoLotePorPeca = 0;
 
   if (modo === 'individual') {
-    tempoHoras = strParaHoras(document.getElementById('tempoIndividualStr').value);
+    const tempoHoras = strParaHoras(document.getElementById('tempoIndividualStr').value);
     consumoIndividual = calcularEnergia(tempoHoras, pico, duracaoPico, sustentada);
     custoEnergiaEscolhido = consumoIndividual * precoKwh;
   } else {
-    qtdLote = parseInt(document.getElementById('qtdLote').value) || 1;
+    const qtdLote = parseInt(document.getElementById('qtdLote').value) || 1;
     const tempoLoteTotal = strParaHoras(document.getElementById('tempoLoteTotalStr').value);
     const consumoLoteTotal = calcularEnergia(tempoLoteTotal, pico, duracaoPico, sustentada);
     consumoLotePorPeca = consumoLoteTotal / qtdLote;
@@ -138,7 +134,6 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
   const custoTotalPeca = custoFilamento + custoEnergiaEscolhido;
 
-  // Exibição
   document.getElementById('custoFilamento').textContent = formatarMoeda(custoFilamento);
   document.getElementById('custoEnergia').textContent = formatarMoeda(custoEnergiaEscolhido);
   document.getElementById('custoTotalPeca').textContent = formatarMoeda(custoTotalPeca);
@@ -202,23 +197,17 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
     data: new Date().toLocaleString(),
     custoTotalPeca,
     precos,
-    detalhes: {
-      peso, desperdicio, precoFilamento,
-      precoKwh, pico, duracaoPico, sustentada,
-      modo, custoFilamento, custoEnergia: custoEnergiaEscolhido
-    }
+    detalhes: { peso, desperdicio, precoFilamento, precoKwh, pico, duracaoPico, sustentada, modo, custoFilamento, custoEnergia: custoEnergiaEscolhido }
   };
 });
 
 // ---------- CÁLCULO REVERSO ----------
 document.getElementById('calcularReversoBtn').addEventListener('click', () => {
-  // Canal e preço
   const canal = document.getElementById('revCanal').value;
   const precoVenda = parseFloatSafe(document.getElementById('revPrecoVenda').value);
   const taxaPercent = parseFloatSafe(document.getElementById('revTaxaPercent').value) / 100;
   const taxaFixa = parseFloatSafe(document.getElementById('revTaxaFixa').value);
 
-  // Custo de produção
   const peso = parseFloatSafe(document.getElementById('revPeso').value);
   const desperdicio = parseFloatSafe(document.getElementById('revDesperdicio').value) / 100;
   const precoFilamento = parseFloatSafe(document.getElementById('revPrecoFilamento').value);
@@ -228,7 +217,6 @@ document.getElementById('calcularReversoBtn').addEventListener('click', () => {
   const duracaoPico = parseFloatSafe(document.getElementById('revDuracaoPico').value);
   const sustentada = parseFloatSafe(document.getElementById('revPotenciaSustentada').value);
 
-  // Cálculo do custo
   const pesoFinal = peso * (1 + desperdicio);
   const custoFilamento = (pesoFinal / 1000) * precoFilamento;
   const tempoHoras = strParaHoras(tempoStr);
@@ -236,13 +224,11 @@ document.getElementById('calcularReversoBtn').addEventListener('click', () => {
   const custoEnergia = consumoEnergia * precoKwh;
   const custoTotalProducao = custoFilamento + custoEnergia;
 
-  // Cálculo do valor líquido da venda
   const taxas = precoVenda * taxaPercent + taxaFixa;
   const valorLiquido = precoVenda - taxas;
   const lucro = valorLiquido - custoTotalProducao;
   const margemLucro = custoTotalProducao > 0 ? (lucro / custoTotalProducao) * 100 : 0;
 
-  // Exibição
   document.getElementById('revCustoFilamento').textContent = formatarMoeda(custoFilamento);
   document.getElementById('revCustoEnergia').textContent = formatarMoeda(custoEnergia);
   document.getElementById('revCustoTotal').textContent = formatarMoeda(custoTotalProducao);
@@ -270,7 +256,6 @@ document.getElementById('calcularReversoBtn').addEventListener('click', () => {
 
   document.getElementById('resultadosReverso').classList.remove('oculto');
 
-  // Guardar estado
   window._ultimoCalculoReverso = {
     tipo: 'reverso',
     nome: `Reverso ${new Date().toLocaleString()}`,
@@ -284,25 +269,17 @@ document.getElementById('calcularReversoBtn').addEventListener('click', () => {
   };
 });
 
-// Salvar reverso no histórico
-document.getElementById('salvarHistoricoReversoBtn').addEventListener('click', () => {
-  if (window._ultimoCalculoReverso) {
-    salvarHistorico(window._ultimoCalculoReverso);
-    alert('Salvo no histórico!');
-    if (document.getElementById('history-tab').classList.contains('active')) {
-      renderizarHistorico();
-    }
-  }
-});
-
-// Salvar calculadora no histórico
+// Salvar histórico (calculadora e reverso)
 document.getElementById('salvarHistoricoBtn').addEventListener('click', () => {
   if (window._ultimoCalculo) {
     salvarHistorico(window._ultimoCalculo);
     alert('Salvo com sucesso!');
-    if (document.getElementById('history-tab').classList.contains('active')) {
-      renderizarHistorico();
-    }
+  }
+});
+document.getElementById('salvarHistoricoReversoBtn').addEventListener('click', () => {
+  if (window._ultimoCalculoReverso) {
+    salvarHistorico(window._ultimoCalculoReverso);
+    alert('Salvo no histórico!');
   }
 });
 
@@ -361,24 +338,26 @@ window.excluirDoHistorico = function(index) {
   }
 };
 
-// Ajustar taxas automaticamente no reverso ao mudar canal
+// Ajuste automático de taxas no Reverso
 document.getElementById('revCanal').addEventListener('change', function() {
   const canal = this.value;
+  const taxaPercent = document.getElementById('revTaxaPercent');
+  const taxaFixa = document.getElementById('revTaxaFixa');
   if (canal === 'direta') {
-    document.getElementById('revTaxaPercent').value = 0;
-    document.getElementById('revTaxaFixa').value = 0;
-    document.getElementById('revTaxaPercent').disabled = true;
-    document.getElementById('revTaxaFixa').disabled = true;
+    taxaPercent.value = 0;
+    taxaFixa.value = 0;
+    taxaPercent.disabled = true;
+    taxaFixa.disabled = true;
   } else if (canal === 'ml') {
-    document.getElementById('revTaxaPercent').value = 11.5;
-    document.getElementById('revTaxaFixa').value = 5.00;
-    document.getElementById('revTaxaPercent').disabled = false;
-    document.getElementById('revTaxaFixa').disabled = false;
+    taxaPercent.value = 11.5;
+    taxaFixa.value = 5.00;
+    taxaPercent.disabled = false;
+    taxaFixa.disabled = false;
   } else if (canal === 'shopee') {
-    document.getElementById('revTaxaPercent').value = 12;
-    document.getElementById('revTaxaFixa').value = 4.00;
-    document.getElementById('revTaxaPercent').disabled = false;
-    document.getElementById('revTaxaFixa').disabled = false;
+    taxaPercent.value = 12;
+    taxaFixa.value = 4.00;
+    taxaPercent.disabled = false;
+    taxaFixa.disabled = false;
   }
 });
 
@@ -389,4 +368,4 @@ if ('serviceWorker' in navigator) {
       .then(reg => console.log('SW registrado com escopo:', reg.scope))
       .catch(err => console.log('Erro no SW:', err));
   });
-} 
+}
