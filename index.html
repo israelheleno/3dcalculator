@@ -24,7 +24,6 @@
 
     <!-- Aba Calculadora -->
     <section id="calc-tab" class="tab-content active">
-      <!-- Conteúdo da calculadora exatamente como já estava -->
       <div class="card">
         <h2>📦 Produto & Filamento</h2>
         <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Caixinha de figurinha"></label>
@@ -32,7 +31,6 @@
         <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1"></label>
         <label>Preço do filamento (R$/kg): <input type="number" id="precoFilamento" value="80.00" step="0.01"></label>
       </div>
-
       <div class="card">
         <h2>⚡ Energia</h2>
         <label>Preço do kWh (R$): <input type="number" id="precoKwh" value="0.93" step="0.01"></label>
@@ -40,7 +38,6 @@
         <label>Duração do pico (min): <input type="number" id="duracaoPico" value="10"></label>
         <label>Potência sustentada (W): <input type="number" id="potenciaSustentada" value="200"></label>
       </div>
-
       <div class="card">
         <h2>⏱️ Tempos de Impressão</h2>
         <label>Modo de produção:
@@ -58,7 +55,6 @@
           <p class="info">⏱️ Tempo médio por peça: <strong><span id="tempoMedioLote">3:14</span></strong></p>
         </div>
       </div>
-
       <div class="card">
         <h2>💰 Precificação</h2>
         <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1"></label>
@@ -81,9 +77,7 @@
           </div>
         </div>
       </div>
-
       <button id="calcularBtn">📊 Calcular</button>
-
       <div id="resultados" class="resultados oculto">
         <h2>📈 Resultados</h2>
         <div class="grid-resultados">
@@ -108,7 +102,7 @@
       </div>
     </section>
 
-    <!-- Aba Reverso (NOVA) -->
+    <!-- Aba Reverso -->
     <section id="reverso-tab" class="tab-content">
       <div class="card">
         <h2>🛒 Condições de Venda</h2>
@@ -128,7 +122,6 @@
           </div>
         </div>
       </div>
-
       <div class="card">
         <h2>⚙️ Custo de Produção</h2>
         <label>Peso da peça (g): <input type="number" id="revPeso" value="50" step="0.1"></label>
@@ -140,9 +133,7 @@
         <label>Duração do pico (min): <input type="number" id="revDuracaoPico" value="10"></label>
         <label>Potência sustentada (W): <input type="number" id="revPotenciaSustentada" value="200"></label>
       </div>
-
       <button id="calcularReversoBtn">🔄 Calcular Reverso</button>
-
       <div id="resultadosReverso" class="resultados oculto">
         <h2>📊 Análise de Lucratividade</h2>
         <div class="grid-resultados">
@@ -188,4 +179,4 @@
 
   <script src="app.js"></script>
 </body>
-</html> 
+</html>
