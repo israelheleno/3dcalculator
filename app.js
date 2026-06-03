@@ -203,6 +203,7 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
 // ---------- CÁLCULO REVERSO ----------
 document.getElementById('calcularReversoBtn').addEventListener('click', () => {
+  const nomeProduto = document.getElementById('revNomeProduto').value || 'Produto sem nome';
   const canal = document.getElementById('revCanal').value;
   const precoVenda = parseFloatSafe(document.getElementById('revPrecoVenda').value);
   const taxaPercent = parseFloatSafe(document.getElementById('revTaxaPercent').value) / 100;
@@ -258,7 +259,7 @@ document.getElementById('calcularReversoBtn').addEventListener('click', () => {
 
   window._ultimoCalculoReverso = {
     tipo: 'reverso',
-    nome: `Reverso ${new Date().toLocaleString()}`,
+    nome: nomeProduto,
     data: new Date().toLocaleString(),
     canal,
     precoVenda,
@@ -305,7 +306,7 @@ function renderizarHistorico() {
     let conteudo = '';
     if (isReverso) {
       conteudo = `
-        ${emoji} <strong>Reverso</strong> (${item.data})<br>
+        ${emoji} <strong>${item.nome}</strong> (${item.data})<br>
         Canal: ${item.canal} | Preço venda: R$ ${formatarMoeda(item.precoVenda)}<br>
         Custo: R$ ${formatarMoeda(item.custoTotalProducao)} | Lucro: R$ ${formatarMoeda(item.lucro)} | Margem: ${item.margemLucro.toFixed(1)}%
       `;
