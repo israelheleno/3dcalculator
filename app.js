@@ -389,4 +389,4 @@ if ('serviceWorker' in navigator) {
       .then(reg => console.log('SW registrado com escopo:', reg.scope))
       .catch(err => console.log('Erro no SW:', err));
   });
-}
+} 
