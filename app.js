@@ -96,30 +96,34 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// ---------- CÁLCULO (Calculadora) ----------
+// ---------- CÁLCULO ----------
 document.getElementById('calcularBtn').addEventListener('click', () => {
+  // Filamento
   const peso = parseFloatSafe(document.getElementById('peso').value);
   const desperdicio = parseFloatSafe(document.getElementById('desperdicio').value) / 100;
   const precoFilamento = parseFloatSafe(document.getElementById('precoFilamento').value);
   const pesoFinal = peso * (1 + desperdicio);
   const custoFilamento = (pesoFinal / 1000) * precoFilamento;
 
+  // Energia
   const precoKwh = parseFloatSafe(document.getElementById('precoKwh').value);
   const pico = parseFloatSafe(document.getElementById('potenciaPico').value);
   const duracaoPico = parseFloatSafe(document.getElementById('duracaoPico').value);
   const sustentada = parseFloatSafe(document.getElementById('potenciaSustentada').value);
 
   const modo = modoSelect.value;
+  let tempoHoras = 0;
+  let qtdLote = 1;
   let custoEnergiaEscolhido = 0;
   let consumoIndividual = 0;
   let consumoLotePorPeca = 0;
 
   if (modo === 'individual') {
-    const tempoHoras = strParaHoras(document.getElementById('tempoIndividualStr').value);
+    tempoHoras = strParaHoras(document.getElementById('tempoIndividualStr').value);
     consumoIndividual = calcularEnergia(tempoHoras, pico, duracaoPico, sustentada);
     custoEnergiaEscolhido = consumoIndividual * precoKwh;
   } else {
-    const qtdLote = parseInt(document.getElementById('qtdLote').value) || 1;
+    qtdLote = parseInt(document.getElementById('qtdLote').value) || 1;
     const tempoLoteTotal = strParaHoras(document.getElementById('tempoLoteTotalStr').value);
     const consumoLoteTotal = calcularEnergia(tempoLoteTotal, pico, duracaoPico, sustentada);
     consumoLotePorPeca = consumoLoteTotal / qtdLote;
@@ -134,9 +138,11 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
   const custoTotalPeca = custoFilamento + custoEnergiaEscolhido;
 
+  // Exibição
   document.getElementById('custoFilamento').textContent = formatarMoeda(custoFilamento);
   document.getElementById('custoEnergia').textContent = formatarMoeda(custoEnergiaEscolhido);
   document.getElementById('custoTotalPeca').textContent = formatarMoeda(custoTotalPeca);
+
   document.getElementById('consumoIndividual').textContent = consumoIndividual ? consumoIndividual.toFixed(3) : '-';
   document.getElementById('consumoLote').textContent = consumoLotePorPeca ? consumoLotePorPeca.toFixed(3) : (modo === 'individual' ? '-' : '0.000');
 
@@ -162,9 +168,14 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
     economiaEl.className = '';
   }
 
+  // Margem e taxas
   const margem = parseFloatSafe(document.getElementById('margemLucro').value) / 100;
   const canais = [
-    { nome: 'Venda Direta', taxaPercent: 0, taxaFixa: 0 },
+    {
+      nome: 'Venda Direta',
+      taxaPercent: parseFloatSafe(document.getElementById('taxaDireta').value) / 100,
+      taxaFixa: parseFloatSafe(document.getElementById('fixoDireta').value)
+    },
     {
       nome: 'Mercado Livre',
       taxaPercent: parseFloatSafe(document.getElementById('taxaML').value) / 100,
@@ -184,103 +195,43 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
     return { nome: canal.nome, preco: numerador / denominador };
   });
 
-  document.getElementById('precosCanais').innerHTML = precos.map(p => {
+  const precosContainer = document.getElementById('precosCanais');
+  precosContainer.innerHTML = precos.map(p => {
     if (p.erro) return `<p>${p.nome}: taxa inválida</p>`;
     return `<p><strong>${p.nome}:</strong> R$ ${formatarMoeda(p.preco)}</p>`;
   }).join('');
 
   document.getElementById('resultados').classList.remove('oculto');
 
+  // ** CORREÇÃO: garantir que o último cálculo seja guardado para o histórico **
   window._ultimoCalculo = {
-    tipo: 'calculadora',
     nome: document.getElementById('nomeProduto').value || 'Sem nome',
     data: new Date().toLocaleString(),
+    peso, desperdicio, precoFilamento,
+    precoKwh, pico, duracaoPico, sustentada,
+    modo,
+    tempoIndividualStr: document.getElementById('tempoIndividualStr').value,
+    tempoLoteTotalStr: modo === 'lote' ? document.getElementById('tempoLoteTotalStr').value : '',
+    qtdLote: modo === 'lote' ? qtdLote : 1,
+    margem,
+    canais,
     custoTotalPeca,
-    precos,
-    detalhes: { peso, desperdicio, precoFilamento, precoKwh, pico, duracaoPico, sustentada, modo, custoFilamento, custoEnergia: custoEnergiaEscolhido }
+    custoFilamento,
+    custoEnergia: custoEnergiaEscolhido,
+    precos
   };
 });
 
-// ---------- CÁLCULO REVERSO ----------
-document.getElementById('calcularReversoBtn').addEventListener('click', () => {
-  const nomeProduto = document.getElementById('revNomeProduto').value || 'Produto sem nome';
-  const canal = document.getElementById('revCanal').value;
-  const precoVenda = parseFloatSafe(document.getElementById('revPrecoVenda').value);
-  const taxaPercent = parseFloatSafe(document.getElementById('revTaxaPercent').value) / 100;
-  const taxaFixa = parseFloatSafe(document.getElementById('revTaxaFixa').value);
-
-  const peso = parseFloatSafe(document.getElementById('revPeso').value);
-  const desperdicio = parseFloatSafe(document.getElementById('revDesperdicio').value) / 100;
-  const precoFilamento = parseFloatSafe(document.getElementById('revPrecoFilamento').value);
-  const tempoStr = document.getElementById('revTempoStr').value;
-  const precoKwh = parseFloatSafe(document.getElementById('revPrecoKwh').value);
-  const pico = parseFloatSafe(document.getElementById('revPotenciaPico').value);
-  const duracaoPico = parseFloatSafe(document.getElementById('revDuracaoPico').value);
-  const sustentada = parseFloatSafe(document.getElementById('revPotenciaSustentada').value);
-
-  const pesoFinal = peso * (1 + desperdicio);
-  const custoFilamento = (pesoFinal / 1000) * precoFilamento;
-  const tempoHoras = strParaHoras(tempoStr);
-  const consumoEnergia = calcularEnergia(tempoHoras, pico, duracaoPico, sustentada);
-  const custoEnergia = consumoEnergia * precoKwh;
-  const custoTotalProducao = custoFilamento + custoEnergia;
-
-  const taxas = precoVenda * taxaPercent + taxaFixa;
-  const valorLiquido = precoVenda - taxas;
-  const lucro = valorLiquido - custoTotalProducao;
-  const margemLucro = custoTotalProducao > 0 ? (lucro / custoTotalProducao) * 100 : 0;
-
-  document.getElementById('revCustoFilamento').textContent = formatarMoeda(custoFilamento);
-  document.getElementById('revCustoEnergia').textContent = formatarMoeda(custoEnergia);
-  document.getElementById('revCustoTotal').textContent = formatarMoeda(custoTotalProducao);
-  document.getElementById('revPrecoVendaDisplay').textContent = formatarMoeda(precoVenda);
-  document.getElementById('revTaxasCobradas').textContent = formatarMoeda(taxas);
-  document.getElementById('revValorLiquido').textContent = formatarMoeda(valorLiquido);
-  document.getElementById('revLucroLiquido').textContent = formatarMoeda(lucro);
-  document.getElementById('revMargemLucro').textContent = margemLucro.toFixed(1);
-
-  const valePenaEl = document.getElementById('revValePena');
-  const indicadorTitulo = document.getElementById('revIndicadorTitulo');
-  if (lucro > 0) {
-    valePenaEl.textContent = '🟢 Vale a pena produzir!';
-    valePenaEl.style.color = '#4ade80';
-    indicadorTitulo.textContent = '📈 Resultado Positivo';
-  } else if (lucro < 0) {
-    valePenaEl.textContent = '🔴 Prejuízo! Não vale a pena.';
-    valePenaEl.style.color = '#f87171';
-    indicadorTitulo.textContent = '📉 Resultado Negativo';
-  } else {
-    valePenaEl.textContent = '⚖️ Empate técnico';
-    valePenaEl.style.color = '#fbbf24';
-    indicadorTitulo.textContent = '📊 Resultado Neutro';
-  }
-
-  document.getElementById('resultadosReverso').classList.remove('oculto');
-
-  window._ultimoCalculoReverso = {
-    tipo: 'reverso',
-    nome: nomeProduto,
-    data: new Date().toLocaleString(),
-    canal,
-    precoVenda,
-    custoTotalProducao,
-    lucro,
-    margemLucro,
-    detalhes: { peso, desperdicio, precoFilamento, tempoStr, precoKwh, pico, duracaoPico, sustentada, custoFilamento, custoEnergia, taxaPercent, taxaFixa }
-  };
-});
-
-// Salvar histórico (calculadora e reverso)
+// ---------- HISTÓRICO ----------
 document.getElementById('salvarHistoricoBtn').addEventListener('click', () => {
   if (window._ultimoCalculo) {
     salvarHistorico(window._ultimoCalculo);
     alert('Salvo com sucesso!');
-  }
-});
-document.getElementById('salvarHistoricoReversoBtn').addEventListener('click', () => {
-  if (window._ultimoCalculoReverso) {
-    salvarHistorico(window._ultimoCalculoReverso);
-    alert('Salvo no histórico!');
+    if (document.getElementById('history-tab').classList.contains('active')) {
+      renderizarHistorico();
+    }
+  } else {
+    alert('Nenhum cálculo realizado. Clique em "Calcular" primeiro.');
   }
 });
 
@@ -300,35 +251,60 @@ function renderizarHistorico() {
   }
   container.innerHTML = historico.slice().reverse().map((item, index) => {
     const idx = historico.length - 1 - index;
-    const isReverso = item.tipo === 'reverso';
-    const emoji = isReverso ? '🔄' : '🧵';
-    const classeExtra = isReverso ? 'reverso-item' : '';
-    let conteudo = '';
-    if (isReverso) {
-      conteudo = `
-        ${emoji} <strong>${item.nome}</strong> (${item.data})<br>
-        Canal: ${item.canal} | Preço venda: R$ ${formatarMoeda(item.precoVenda)}<br>
-        Custo: R$ ${formatarMoeda(item.custoTotalProducao)} | Lucro: R$ ${formatarMoeda(item.lucro)} | Margem: ${item.margemLucro.toFixed(1)}%
-      `;
-    } else {
-      conteudo = `
-        ${emoji} <strong>${item.nome}</strong> (${item.data})<br>
-        Custo: R$ ${formatarMoeda(item.custoTotalPeca)} |
-        Venda Direta: R$ ${formatarMoeda(item.precos[0].preco)} |
-        ML: R$ ${formatarMoeda(item.precos[1].preco)} |
-        Shopee: R$ ${formatarMoeda(item.precos[2].preco)}
-      `;
-    }
     return `
-      <div class="historico-item ${classeExtra}">
-        <div class="historico-info">${conteudo}</div>
+      <div class="historico-item">
+        <div class="historico-info">
+          <strong>${item.nome}</strong> (${item.data})<br>
+          Custo: R$ ${formatarMoeda(item.custoTotalPeca)} |
+          Venda Direta: R$ ${formatarMoeda(item.precos[0].preco)} |
+          ML: R$ ${formatarMoeda(item.precos[1].preco)} |
+          Shopee: R$ ${formatarMoeda(item.precos[2].preco)}
+        </div>
         <div class="historico-acoes">
-          <button onclick="excluirDoHistorico(${idx})" class="btn-perigo">❌</button>
+          <button onclick="carregarDeHistorico(${idx})">📂 Carregar</button>
+          <button class="btn-perigo" onclick="excluirDoHistorico(${idx})">❌</button>
         </div>
       </div>
     `;
   }).join('');
 }
+
+window.carregarDeHistorico = function(index) {
+  const historico = carregarHistorico();
+  const item = historico[index];
+  if (!item) return;
+
+  document.getElementById('nomeProduto').value = item.nome;
+  document.getElementById('peso').value = item.peso;
+  document.getElementById('desperdicio').value = item.desperdicio * 100;
+  document.getElementById('precoFilamento').value = item.precoFilamento;
+  document.getElementById('precoKwh').value = item.precoKwh;
+  document.getElementById('potenciaPico').value = item.pico;
+  document.getElementById('duracaoPico').value = item.duracaoPico;
+  document.getElementById('potenciaSustentada').value = item.sustentada;
+
+  modoSelect.value = item.modo;
+  document.getElementById('tempoIndividualStr').value = item.tempoIndividualStr || '0:00';
+  if (item.modo === 'lote') {
+    document.getElementById('qtdLote').value = item.qtdLote || 2;
+    document.getElementById('tempoLoteTotalStr').value = item.tempoLoteTotalStr || '0:00';
+  }
+  atualizarCamposTempo();
+  if (item.modo === 'lote') calcularTempoMedioLote();
+
+  document.getElementById('margemLucro').value = item.margem * 100;
+  document.getElementById('taxaML').value = item.canais[1].taxaPercent * 100;
+  document.getElementById('fixoML').value = item.canais[1].taxaFixa;
+  document.getElementById('taxaShopee').value = item.canais[2].taxaPercent * 100;
+  document.getElementById('fixoShopee').value = item.canais[2].taxaFixa;
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="calc"]').classList.add('active');
+  document.getElementById('calc-tab').classList.add('active');
+  document.getElementById('history-tab').classList.remove('active');
+
+  document.getElementById('calcularBtn').click();
+};
 
 window.excluirDoHistorico = function(index) {
   if (confirm('Excluir este registro?')) {
@@ -338,29 +314,6 @@ window.excluirDoHistorico = function(index) {
     renderizarHistorico();
   }
 };
-
-// Ajuste automático de taxas no Reverso
-document.getElementById('revCanal').addEventListener('change', function() {
-  const canal = this.value;
-  const taxaPercent = document.getElementById('revTaxaPercent');
-  const taxaFixa = document.getElementById('revTaxaFixa');
-  if (canal === 'direta') {
-    taxaPercent.value = 0;
-    taxaFixa.value = 0;
-    taxaPercent.disabled = true;
-    taxaFixa.disabled = true;
-  } else if (canal === 'ml') {
-    taxaPercent.value = 11.5;
-    taxaFixa.value = 5.00;
-    taxaPercent.disabled = false;
-    taxaFixa.disabled = false;
-  } else if (canal === 'shopee') {
-    taxaPercent.value = 12;
-    taxaFixa.value = 4.00;
-    taxaPercent.disabled = false;
-    taxaFixa.disabled = false;
-  }
-});
 
 // Service Worker
 if ('serviceWorker' in navigator) {
