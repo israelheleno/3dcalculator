@@ -31,7 +31,6 @@ function parseFloatSafe(val) {
   return isNaN(v) ? 0 : v;
 }
 
-// Preenche zero automaticamente nos campos de tempo
 function setupTempoAutoZero(horaInput, minutoInput) {
   horaInput.addEventListener('blur', () => {
     if (horaInput.value === '') horaInput.value = '0';
@@ -53,13 +52,11 @@ const containerIndividual = document.getElementById('tempoIndividualContainer');
 const containerLote = document.getElementById('tempoLoteContainer');
 const tempoMedioLoteSpan = document.getElementById('tempoMedioLote');
 
-// Novos campos separados
 const tempoIndividualH = document.getElementById('tempoIndividualH');
 const tempoIndividualM = document.getElementById('tempoIndividualM');
 const tempoLoteTotalH = document.getElementById('tempoLoteTotalH');
 const tempoLoteTotalM = document.getElementById('tempoLoteTotalM');
 
-// Configura preenchimento automático de zero
 setupTempoAutoZero(tempoIndividualH, tempoIndividualM);
 setupTempoAutoZero(tempoLoteTotalH, tempoLoteTotalM);
 
@@ -115,7 +112,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(content => {
       content.classList.toggle('active', content.id === `${tab}-tab`);
     });
-    // CORREÇÃO: renderiza o histórico sempre que a aba for ativada
     if (tab === 'history') {
       renderizarHistorico();
     }
@@ -124,14 +120,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ---------- CÁLCULO ----------
 document.getElementById('calcularBtn').addEventListener('click', () => {
-  // Filamento
   const peso = parseFloatSafe(document.getElementById('peso').value);
   const desperdicio = parseFloatSafe(document.getElementById('desperdicio').value) / 100;
   const precoFilamento = parseFloatSafe(document.getElementById('precoFilamento').value);
   const pesoFinal = peso * (1 + desperdicio);
   const custoFilamento = (pesoFinal / 1000) * precoFilamento;
 
-  // Energia
   const precoKwh = parseFloatSafe(document.getElementById('precoKwh').value);
   const pico = parseFloatSafe(document.getElementById('potenciaPico').value);
   const duracaoPico = parseFloatSafe(document.getElementById('duracaoPico').value);
@@ -163,7 +157,6 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
   const custoTotalPeca = custoFilamento + custoEnergiaEscolhido;
 
-  // Exibição
   document.getElementById('custoFilamento').textContent = formatarMoeda(custoFilamento);
   document.getElementById('custoEnergia').textContent = formatarMoeda(custoEnergiaEscolhido);
   document.getElementById('custoTotalPeca').textContent = formatarMoeda(custoTotalPeca);
@@ -193,7 +186,6 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
     economiaEl.className = '';
   }
 
-  // Margem e taxas
   const margem = parseFloatSafe(document.getElementById('margemLucro').value) / 100;
   const canais = [
     {
@@ -227,11 +219,8 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
   }).join('');
 
   document.getElementById('resultados').classList.remove('oculto');
-
-  // Rolagem suave até os resultados
   document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
 
-  // Guardar estado para o histórico
   window._ultimoCalculo = {
     nome: document.getElementById('nomeProduto').value || 'Sem nome',
     data: new Date().toLocaleString(),
