@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace">
   <meta name="theme-color" content="#0f172a">
-  <!-- Caminho absoluto ajustado para o repositório -->
   <link rel="manifest" href="/3dcalculator/manifest.json">
   <link rel="icon" href="/3dcalculator/icon-192.png">
   <link rel="apple-touch-icon" href="/3dcalculator/icon-192.png">
-  <title>Calculadora 3D Pro</title>
+  <title>3D Calculator Pro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🧵 Calculadora 3D Pro</h1>
+      <h1>🧵 3D Calculator Pro</h1>
       <nav class="tabs">
         <button class="tab-btn active" data-tab="calc">Calculadora</button>
         <button class="tab-btn" data-tab="history">Histórico</button>
@@ -25,7 +24,7 @@
     <!-- Aba Calculadora -->
     <section id="calc-tab" class="tab-content active">
       <div class="card">
-        <h2>📦 Produto &amp; Filamento</h2>
+        <h2>📦 Produto & Filamento</h2>
         <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Caixinha de figurinha"></label>
         <label>Peso da peça (g): <input type="number" id="peso" value="50" step="0.1"></label>
         <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1"></label>
@@ -49,11 +48,23 @@
           </select>
         </label>
         <div id="tempoIndividualContainer">
-          <label>Tempo total da peça (hh:mm): <input type="text" id="tempoIndividualStr" value="3:26" placeholder="h:mm"></label>
+          <label>Tempo total da peça:</label>
+          <div class="tempo-duplo">
+            <input type="number" id="tempoIndividualH" placeholder="Horas" min="0" value="3" class="tempo-hora">
+            <span class="tempo-separador">h</span>
+            <input type="number" id="tempoIndividualM" placeholder="Minutos" min="0" max="59" value="26" class="tempo-minuto">
+            <span class="tempo-separador">min</span>
+          </div>
         </div>
         <div id="tempoLoteContainer" style="display:none;">
           <label>Quantidade de peças no lote: <input type="number" id="qtdLote" value="4" min="2"></label>
-          <label>Tempo total do lote (hh:mm): <input type="text" id="tempoLoteTotalStr" value="12:56" placeholder="h:mm"></label>
+          <label>Tempo total do lote:</label>
+          <div class="tempo-duplo">
+            <input type="number" id="tempoLoteTotalH" placeholder="Horas" min="0" value="12" class="tempo-hora">
+            <span class="tempo-separador">h</span>
+            <input type="number" id="tempoLoteTotalM" placeholder="Minutos" min="0" max="59" value="56" class="tempo-minuto">
+            <span class="tempo-separador">min</span>
+          </div>
           <p class="info">⏱️ Tempo médio por peça: <strong><span id="tempoMedioLote">3:14</span></strong></p>
         </div>
       </div>
@@ -104,6 +115,7 @@
           </div>
         </div>
         <button id="salvarHistoricoBtn" class="btn-secundario">💾 Salvar no histórico</button>
+        <p id="msgSalvo" class="msg-salvo oculto">✅ Salvo com sucesso!</p>
       </div>
     </section>
 
@@ -111,7 +123,9 @@
     <section id="history-tab" class="tab-content">
       <div class="card">
         <h2>📋 Histórico de cálculos</h2>
-        <div id="historicoLista"></div>
+        <div id="historicoLista">
+          <p class="historico-vazio">📋 Nenhum cálculo salvo ainda.<br><small>Faça um cálculo e clique em "Salvar no histórico".</small></p>
+        </div>
         <button id="limparHistoricoBtn" class="btn-perigo">🗑️ Limpar histórico</button>
       </div>
     </section>
@@ -120,7 +134,7 @@
   <footer class="footer">
     <div class="footer-content">
       <span>&copy; 2026 <strong>IHC Solutions</strong></span>
-      <span class="versao">V 4.2</span>
+      <span class="versao">V 4.3</span>
     </div>
   </footer>
 
