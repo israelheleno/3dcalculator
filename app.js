@@ -1,10 +1,8 @@
 // ---------- UTILITÁRIOS ----------
-function strParaHoras(str) {
-  if (!str || !str.includes(':')) return 0;
-  const partes = str.split(':');
-  const horas = parseInt(partes[0]) || 0;
-  const minutos = parseInt(partes[1]) || 0;
-  return horas + minutos / 60;
+function strParaHoras(horasStr, minutosStr) {
+  const h = parseInt(horasStr) || 0;
+  const m = parseInt(minutosStr) || 0;
+  return h + m / 60;
 }
 
 function horasParaStr(horas) {
@@ -33,11 +31,37 @@ function parseFloatSafe(val) {
   return isNaN(v) ? 0 : v;
 }
 
+// Preenche zero automaticamente nos campos de tempo
+function setupTempoAutoZero(horaInput, minutoInput) {
+  horaInput.addEventListener('blur', () => {
+    if (horaInput.value === '') horaInput.value = '0';
+  });
+  minutoInput.addEventListener('blur', () => {
+    if (minutoInput.value === '') minutoInput.value = '0';
+  });
+  horaInput.addEventListener('focus', () => {
+    if (horaInput.value === '0') horaInput.value = '';
+  });
+  minutoInput.addEventListener('focus', () => {
+    if (minutoInput.value === '0') minutoInput.value = '';
+  });
+}
+
 // ---------- INTERFACE DINÂMICA DOS TEMPOS ----------
 const modoSelect = document.getElementById('modoProducao');
 const containerIndividual = document.getElementById('tempoIndividualContainer');
 const containerLote = document.getElementById('tempoLoteContainer');
 const tempoMedioLoteSpan = document.getElementById('tempoMedioLote');
+
+// Novos campos separados
+const tempoIndividualH = document.getElementById('tempoIndividualH');
+const tempoIndividualM = document.getElementById('tempoIndividualM');
+const tempoLoteTotalH = document.getElementById('tempoLoteTotalH');
+const tempoLoteTotalM = document.getElementById('tempoLoteTotalM');
+
+// Configura preenchimento automático de zero
+setupTempoAutoZero(tempoIndividualH, tempoIndividualM);
+setupTempoAutoZero(tempoLoteTotalH, tempoLoteTotalM);
 
 function atualizarCamposTempo() {
   const modo = modoSelect.value;
@@ -53,7 +77,7 @@ function atualizarCamposTempo() {
 
 function calcularTempoMedioLote() {
   const qtd = parseInt(document.getElementById('qtdLote').value) || 1;
-  const tempoTotal = strParaHoras(document.getElementById('tempoLoteTotalStr').value);
+  const tempoTotal = strParaHoras(tempoLoteTotalH.value, tempoLoteTotalM.value);
   const tempoMedio = qtd > 0 ? tempoTotal / qtd : 0;
   if (tempoMedioLoteSpan) {
     tempoMedioLoteSpan.textContent = horasParaStr(tempoMedio);
@@ -62,7 +86,8 @@ function calcularTempoMedioLote() {
 
 modoSelect.addEventListener('change', atualizarCamposTempo);
 document.getElementById('qtdLote').addEventListener('input', calcularTempoMedioLote);
-document.getElementById('tempoLoteTotalStr').addEventListener('input', calcularTempoMedioLote);
+tempoLoteTotalH.addEventListener('input', calcularTempoMedioLote);
+tempoLoteTotalM.addEventListener('input', calcularTempoMedioLote);
 
 atualizarCamposTempo();
 
@@ -90,6 +115,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(content => {
       content.classList.toggle('active', content.id === `${tab}-tab`);
     });
+    // CORREÇÃO: renderiza o histórico sempre que a aba for ativada
     if (tab === 'history') {
       renderizarHistorico();
     }
@@ -119,19 +145,18 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
   let consumoLotePorPeca = 0;
 
   if (modo === 'individual') {
-    tempoHoras = strParaHoras(document.getElementById('tempoIndividualStr').value);
+    tempoHoras = strParaHoras(tempoIndividualH.value, tempoIndividualM.value);
     consumoIndividual = calcularEnergia(tempoHoras, pico, duracaoPico, sustentada);
     custoEnergiaEscolhido = consumoIndividual * precoKwh;
   } else {
     qtdLote = parseInt(document.getElementById('qtdLote').value) || 1;
-    const tempoLoteTotal = strParaHoras(document.getElementById('tempoLoteTotalStr').value);
+    const tempoLoteTotal = strParaHoras(tempoLoteTotalH.value, tempoLoteTotalM.value);
     const consumoLoteTotal = calcularEnergia(tempoLoteTotal, pico, duracaoPico, sustentada);
     consumoLotePorPeca = consumoLoteTotal / qtdLote;
     custoEnergiaEscolhido = consumoLotePorPeca * precoKwh;
 
-    const tempoIndividualStr = document.getElementById('tempoIndividualStr').value;
-    if (tempoIndividualStr) {
-      const tempoInd = strParaHoras(tempoIndividualStr);
+    const tempoInd = strParaHoras(tempoIndividualH.value, tempoIndividualM.value);
+    if (tempoInd > 0) {
       consumoIndividual = calcularEnergia(tempoInd, pico, duracaoPico, sustentada);
     }
   }
@@ -203,15 +228,20 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
   document.getElementById('resultados').classList.remove('oculto');
 
-  // ** CORREÇÃO: garantir que o último cálculo seja guardado para o histórico **
+  // Rolagem suave até os resultados
+  document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+
+  // Guardar estado para o histórico
   window._ultimoCalculo = {
     nome: document.getElementById('nomeProduto').value || 'Sem nome',
     data: new Date().toLocaleString(),
     peso, desperdicio, precoFilamento,
     precoKwh, pico, duracaoPico, sustentada,
     modo,
-    tempoIndividualStr: document.getElementById('tempoIndividualStr').value,
-    tempoLoteTotalStr: modo === 'lote' ? document.getElementById('tempoLoteTotalStr').value : '',
+    tempoIndividualH: tempoIndividualH.value,
+    tempoIndividualM: tempoIndividualM.value,
+    tempoLoteTotalH: modo === 'lote' ? tempoLoteTotalH.value : '0',
+    tempoLoteTotalM: modo === 'lote' ? tempoLoteTotalM.value : '0',
     qtdLote: modo === 'lote' ? qtdLote : 1,
     margem,
     canais,
@@ -224,9 +254,11 @@ document.getElementById('calcularBtn').addEventListener('click', () => {
 
 // ---------- HISTÓRICO ----------
 document.getElementById('salvarHistoricoBtn').addEventListener('click', () => {
+  const msgEl = document.getElementById('msgSalvo');
   if (window._ultimoCalculo) {
     salvarHistorico(window._ultimoCalculo);
-    alert('Salvo com sucesso!');
+    msgEl.classList.remove('oculto');
+    setTimeout(() => msgEl.classList.add('oculto'), 2500);
     if (document.getElementById('history-tab').classList.contains('active')) {
       renderizarHistorico();
     }
@@ -246,7 +278,7 @@ function renderizarHistorico() {
   const historico = carregarHistorico();
   const container = document.getElementById('historicoLista');
   if (historico.length === 0) {
-    container.innerHTML = '<p>Nenhum cálculo salvo ainda.</p>';
+    container.innerHTML = '<p class="historico-vazio">📋 Nenhum cálculo salvo ainda.<br><small>Faça um cálculo e clique em "Salvar no histórico".</small></p>';
     return;
   }
   container.innerHTML = historico.slice().reverse().map((item, index) => {
@@ -284,10 +316,12 @@ window.carregarDeHistorico = function(index) {
   document.getElementById('potenciaSustentada').value = item.sustentada;
 
   modoSelect.value = item.modo;
-  document.getElementById('tempoIndividualStr').value = item.tempoIndividualStr || '0:00';
+  document.getElementById('tempoIndividualH').value = item.tempoIndividualH || '0';
+  document.getElementById('tempoIndividualM').value = item.tempoIndividualM || '0';
   if (item.modo === 'lote') {
     document.getElementById('qtdLote').value = item.qtdLote || 2;
-    document.getElementById('tempoLoteTotalStr').value = item.tempoLoteTotalStr || '0:00';
+    document.getElementById('tempoLoteTotalH').value = item.tempoLoteTotalH || '0';
+    document.getElementById('tempoLoteTotalM').value = item.tempoLoteTotalM || '0';
   }
   atualizarCamposTempo();
   if (item.modo === 'lote') calcularTempoMedioLote();
