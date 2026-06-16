@@ -31,19 +31,9 @@ function parseFloatSafe(val) {
   return isNaN(v) ? 0 : v;
 }
 
+// Função de compatibilidade — o zero automático é tratado em strParaHoras
 function setupTempoAutoZero(horaInput, minutoInput) {
-  horaInput.addEventListener('blur', () => {
-    if (horaInput.value === '') horaInput.value = '0';
-  });
-  minutoInput.addEventListener('blur', () => {
-    if (minutoInput.value === '') minutoInput.value = '0';
-  });
-  horaInput.addEventListener('focus', () => {
-    if (horaInput.value === '0') horaInput.value = '';
-  });
-  minutoInput.addEventListener('focus', () => {
-    if (minutoInput.value === '0') minutoInput.value = '';
-  });
+  // intencionalmente vazia
 }
 
 // ---------- INTERFACE DINÂMICA DOS TEMPOS ----------
@@ -56,9 +46,6 @@ const tempoIndividualH = document.getElementById('tempoIndividualH');
 const tempoIndividualM = document.getElementById('tempoIndividualM');
 const tempoLoteTotalH = document.getElementById('tempoLoteTotalH');
 const tempoLoteTotalM = document.getElementById('tempoLoteTotalM');
-
-setupTempoAutoZero(tempoIndividualH, tempoIndividualM);
-setupTempoAutoZero(tempoLoteTotalH, tempoLoteTotalM);
 
 function atualizarCamposTempo() {
   const modo = modoSelect.value;
@@ -305,12 +292,12 @@ window.carregarDeHistorico = function(index) {
   document.getElementById('potenciaSustentada').value = item.sustentada;
 
   modoSelect.value = item.modo;
-  document.getElementById('tempoIndividualH').value = item.tempoIndividualH || '0';
-  document.getElementById('tempoIndividualM').value = item.tempoIndividualM || '0';
+  document.getElementById('tempoIndividualH').value = item.tempoIndividualH || '';
+  document.getElementById('tempoIndividualM').value = item.tempoIndividualM || '';
   if (item.modo === 'lote') {
     document.getElementById('qtdLote').value = item.qtdLote || 2;
-    document.getElementById('tempoLoteTotalH').value = item.tempoLoteTotalH || '0';
-    document.getElementById('tempoLoteTotalM').value = item.tempoLoteTotalM || '0';
+    document.getElementById('tempoLoteTotalH').value = item.tempoLoteTotalH || '';
+    document.getElementById('tempoLoteTotalM').value = item.tempoLoteTotalM || '';
   }
   atualizarCamposTempo();
   if (item.modo === 'lote') calcularTempoMedioLote();
