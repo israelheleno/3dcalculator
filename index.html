@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace">
+  <meta name="description" content="Calculadora de custo para impressão 3D com taxas de marketplace e cálculo reverso">
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="/3dcalculator/manifest.json">
   <link rel="icon" href="/3dcalculator/icon-192.png">
@@ -17,10 +17,12 @@
       <h1>🧵 3D Calculator Pro</h1>
       <nav class="tabs">
         <button class="tab-btn active" data-tab="calc">Calculadora</button>
+        <button class="tab-btn" data-tab="reverso">Reverso</button>
         <button class="tab-btn" data-tab="history">Histórico</button>
       </nav>
     </header>
 
+    <!-- Aba Calculadora -->
     <section id="calc-tab" class="tab-content active">
       <div class="card">
         <h2>📦 Produto & Filamento</h2>
@@ -99,7 +101,7 @@
           <div class="resumo">
             <h3>🧾 Custo por peça</h3>
             <p>Filamento: R$ <span id="custoFilamento">0.00</span></p>
-            <p>Energia (modo escolhido): R$ <span id="custoEnergia">0.00</span></p>
+            <p>Energia: R$ <span id="custoEnergia">0.00</span></p>
             <p><strong>Total: R$ <span id="custoTotalPeca">0.00</span></strong></p>
           </div>
           <div class="resumo">
@@ -118,6 +120,62 @@
       </div>
     </section>
 
+    <!-- Aba Reverso -->
+    <section id="reverso-tab" class="tab-content">
+      <div class="card">
+        <h2>🔄 Cálculo Reverso</h2>
+        <p class="info-reverso">Descubra se vale a pena fabricar uma peça baseado no preço que já está sendo praticado no mercado.</p>
+      </div>
+
+      <div class="card">
+        <h2>📦 Seus Custos</h2>
+        <label>Custo do filamento por peça (R$): <input type="number" id="revCustoFilamento" value="2.20" step="0.01"></label>
+        <label>Custo de energia por peça (R$): <input type="number" id="revCustoEnergia" value="0.50" step="0.01"></label>
+        <label>Tempo de produção (minutos): <input type="number" id="revTempoProducao" value="60" step="1"></label>
+      </div>
+
+      <div class="card">
+        <h2>🏷️ Preço de Mercado</h2>
+        <label>Preço de venda observado (R$): <input type="number" id="revPrecoVenda" value="29.90" step="0.01"></label>
+        <label>Canal de venda:
+          <select id="revCanal">
+            <option value="direta">Venda Direta (sem taxas)</option>
+            <option value="ml">Mercado Livre (11,5% + R$ 5,00)</option>
+            <option value="shopee">Shopee (12% + R$ 4,00)</option>
+          </select>
+        </label>
+      </div>
+
+      <button id="calcularReversoBtn">🔄 Calcular Viabilidade</button>
+
+      <div id="resultadosReverso" class="resultados oculto">
+        <h2>📊 Resultado da Análise</h2>
+        <div class="grid-resultados">
+          <div class="resumo">
+            <h3>🧾 Custos</h3>
+            <p>Filamento: R$ <span id="revFilamento">0.00</span></p>
+            <p>Energia: R$ <span id="revEnergia">0.00</span></p>
+            <p><strong>Custo total: R$ <span id="revCustoTotal">0.00</span></strong></p>
+          </div>
+          <div class="resumo">
+            <h3>🏷️ Venda</h3>
+            <p>Preço de venda: R$ <span id="revPreco">0.00</span></p>
+            <p>Taxas do canal: R$ <span id="revTaxas">0.00</span></p>
+            <p><strong>Valor líquido: R$ <span id="revLiquido">0.00</span></strong></p>
+          </div>
+          <div class="resumo destaque" id="revVereditoContainer">
+            <h3>📋 Veredito</h3>
+            <p id="revLucro"></p>
+            <p id="revMargem"></p>
+            <p id="revVeredito" class="veredito-texto"></p>
+          </div>
+        </div>
+        <button id="salvarReversoBtn" class="btn-secundario">💾 Salvar no histórico</button>
+        <p id="msgSalvoReverso" class="msg-salvo oculto">✅ Salvo com sucesso!</p>
+      </div>
+    </section>
+
+    <!-- Aba Histórico -->
     <section id="history-tab" class="tab-content">
       <div class="card">
         <h2>📋 Histórico de cálculos</h2>
@@ -132,12 +190,12 @@
   <footer class="footer">
     <div class="footer-content">
       <span>&copy; 2026 <strong>IHC Solutions</strong></span>
-      <span class="versao">V 4.5</span>
+      <span class="versao">V 5.0</span>
     </div>
     <div class="footer-links">
-      <a href="privacidade.html" target="_blank">Política de Privacidade</a>
+      <a href="privacidade.html">Política de Privacidade</a>
       <span class="footer-separador">·</span>
-      <a href="privacidade.html#termos" target="_blank">Termos de Uso</a>
+      <a href="privacidade.html#termos">Termos de Uso</a>
     </div>
   </footer>
 
