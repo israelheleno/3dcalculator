@@ -49,6 +49,7 @@ h1 {
   padding: 6px;
   border-radius: 14px;
   border: 1px solid rgba(71, 85, 105, 0.3);
+  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -62,6 +63,7 @@ h1 {
   font-size: 0.95rem;
   transition: all 0.2s ease;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .tab-btn:hover {
@@ -161,6 +163,12 @@ input::placeholder {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.info-reverso {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .taxas-grid {
@@ -287,6 +295,24 @@ button:active {
   margin-top: 8px;
 }
 
+.veredito-texto {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.veredito-positivo {
+  color: #4ade80;
+}
+
+.veredito-negativo {
+  color: #f87171;
+}
+
+.veredito-alerta {
+  color: #fbbf24;
+}
+
 .historico-item {
   background: rgba(15, 23, 42, 0.5);
   backdrop-filter: blur(4px);
@@ -320,7 +346,6 @@ button:active {
   border-radius: 10px;
 }
 
-/* Campos de tempo duplos */
 .tempo-duplo {
   display: flex;
   align-items: center;
@@ -340,7 +365,6 @@ button:active {
   font-size: 0.9rem;
 }
 
-/* Mensagem de salvo */
 .msg-salvo {
   color: #4ade80;
   font-weight: 600;
@@ -353,7 +377,6 @@ button:active {
   display: none;
 }
 
-/* Histórico vazio */
 .historico-vazio {
   text-align: center;
   color: #64748b;
@@ -367,7 +390,6 @@ button:active {
   color: #475569;
 }
 
-/* Footer */
 .footer {
   margin-top: 40px;
   padding: 20px 0;
@@ -448,5 +470,15 @@ button:active {
   .tempo-hora,
   .tempo-minuto {
     width: 65px;
+  }
+
+  .tabs {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .tab-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
   }
 }
