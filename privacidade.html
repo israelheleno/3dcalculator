@@ -23,6 +23,34 @@
             padding: 40px 20px;
         }
 
+        .voltar-bar {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .voltar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            padding: 12px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+        }
+
+        .voltar-btn:hover {
+            background: rgba(245, 158, 11, 0.25);
+            color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.2);
+        }
+
         .container {
             max-width: 780px;
             margin: 0 auto;
@@ -143,10 +171,18 @@
             h1 {
                 font-size: 1.5rem;
             }
+            .voltar-btn {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="voltar-bar">
+        <a href="index.html" class="voltar-btn">← Voltar para o app</a>
+    </div>
+
     <div class="container">
 
         <!-- POLÍTICA DE PRIVACIDADE -->
@@ -189,8 +225,8 @@
         </div>
 
         <!-- TERMOS DE USO -->
-<div class="card" id="termos">
-    <h1>Termos de Uso</h1>
+        <div class="card" id="termos">
+            <h1>Termos de Uso</h1>
             <p class="data">Em vigor desde 16 de Junho de 2026</p>
 
             <h2>1. Aceitação dos Termos</h2>
@@ -223,8 +259,12 @@
             <p>Estes termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de residência do desenvolvedor para dirimir quaisquer questões oriundas destes termos.</p>
         </div>
 
+        <div class="voltar-bar">
+            <a href="index.html" class="voltar-btn">← Voltar para o app</a>
+        </div>
+
         <p class="footer-note">
-            © 2026 <strong>IHC Solutions</strong> · <a href="https://israelheleno.github.io/3dcalculator/">3D Calculator Pro</a> · Contato: <a href="mailto:ihcsolutions.contato@gmail.com">ihcsolutions.contato@gmail.com</a>
+            © 2026 <strong>IHC Solutions</strong> · <a href="index.html">3D Calculator Pro</a> · Contato: <a href="mailto:ihcsolutions.contato@gmail.com">ihcsolutions.contato@gmail.com</a>
         </p>
     </div>
 </body>
