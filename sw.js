@@ -1,10 +1,11 @@
-const CACHE_NAME = 'calc3d-v4.2';
+const CACHE_NAME = 'calc3d-v5.1';
 const urlsToCache = [
   '/3dcalculator/',
   '/3dcalculator/index.html',
   '/3dcalculator/style.css',
   '/3dcalculator/app.js',
   '/3dcalculator/manifest.json',
+  '/3dcalculator/privacidade.html',
   '/3dcalculator/icon-192.png',
   '/3dcalculator/icon-512.png'
 ];
