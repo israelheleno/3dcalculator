@@ -26,18 +26,18 @@
     <section id="calc-tab" class="tab-content active">
       <div class="card">
         <h2>📦 Produto & Filamento</h2>
-        <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Caixinha de figurinha"></label>
-        <label>Peso da peça (g): <input type="number" id="peso" value="50" step="0.1"></label>
-        <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1"></label>
-        <label>Preço do filamento (R$/kg): <input type="number" id="precoFilamento" value="80.00" step="0.01"></label>
+        <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Suporte para celular"></label>
+        <label>Peso da peça (g): <input type="number" id="peso" value="50" step="0.1" inputmode="decimal"></label>
+        <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1" inputmode="decimal"></label>
+        <label>Preço do filamento (R$/kg): <input type="number" id="precoFilamento" value="80.00" step="0.01" inputmode="decimal"></label>
       </div>
 
       <div class="card">
         <h2>⚡ Energia</h2>
-        <label>Preço do kWh (R$): <input type="number" id="precoKwh" value="0.93" step="0.01"></label>
-        <label>Potência de pico (W): <input type="number" id="potenciaPico" value="1250"></label>
-        <label>Duração do pico (min): <input type="number" id="duracaoPico" value="10"></label>
-        <label>Potência sustentada (W): <input type="number" id="potenciaSustentada" value="200"></label>
+        <label>Preço do kWh (R$): <input type="number" id="precoKwh" value="0.93" step="0.01" inputmode="decimal"></label>
+        <label>Potência de pico (W): <input type="number" id="potenciaPico" value="1250" inputmode="numeric"></label>
+        <label>Duração do pico (min): <input type="number" id="duracaoPico" value="10" inputmode="numeric"></label>
+        <label>Potência sustentada (W): <input type="number" id="potenciaSustentada" value="200" inputmode="numeric"></label>
       </div>
 
       <div class="card">
@@ -51,19 +51,19 @@
         <div id="tempoIndividualContainer">
           <label>Tempo total da peça:</label>
           <div class="tempo-duplo">
-            <input type="number" id="tempoIndividualH" placeholder="0" min="0" class="tempo-hora">
+            <input type="number" id="tempoIndividualH" placeholder="0" min="0" class="tempo-hora" inputmode="numeric">
             <span class="tempo-separador">h</span>
-            <input type="number" id="tempoIndividualM" placeholder="0" min="0" max="59" class="tempo-minuto">
+            <input type="number" id="tempoIndividualM" placeholder="0" min="0" max="59" class="tempo-minuto" inputmode="numeric">
             <span class="tempo-separador">min</span>
           </div>
         </div>
         <div id="tempoLoteContainer" style="display:none;">
-          <label>Quantidade de peças no lote: <input type="number" id="qtdLote" value="4" min="2"></label>
+          <label>Quantidade de peças no lote: <input type="number" id="qtdLote" value="4" min="2" inputmode="numeric"></label>
           <label>Tempo total do lote:</label>
           <div class="tempo-duplo">
-            <input type="number" id="tempoLoteTotalH" placeholder="0" min="0" class="tempo-hora">
+            <input type="number" id="tempoLoteTotalH" placeholder="0" min="0" class="tempo-hora" inputmode="numeric">
             <span class="tempo-separador">h</span>
-            <input type="number" id="tempoLoteTotalM" placeholder="0" min="0" max="59" class="tempo-minuto">
+            <input type="number" id="tempoLoteTotalM" placeholder="0" min="0" max="59" class="tempo-minuto" inputmode="numeric">
             <span class="tempo-separador">min</span>
           </div>
           <p class="info">⏱️ Tempo médio por peça: <strong><span id="tempoMedioLote">0:00</span></strong></p>
@@ -72,23 +72,24 @@
 
       <div class="card">
         <h2>💰 Precificação</h2>
-        <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1"></label>
+        <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1" inputmode="decimal"></label>
         <h3>Taxas dos canais</h3>
+        <p class="info-taxas">✅ Taxas reais atualizadas (Junho 2026)</p>
         <div class="taxas-grid">
           <div>
             <strong>🏪 Venda Direta</strong>
-            <label>Taxa (%): <input type="number" id="taxaDireta" value="0" step="0.1"></label>
-            <label>Fixo (R$): <input type="number" id="fixoDireta" value="0" step="0.01"></label>
+            <label>Taxa (%): <input type="number" id="taxaDireta" value="0" step="0.1" inputmode="decimal"></label>
+            <label>Fixo (R$): <input type="number" id="fixoDireta" value="0" step="0.01" inputmode="decimal"></label>
           </div>
           <div>
             <strong>🟡 Mercado Livre</strong>
-            <label>Comissão (%): <input type="number" id="taxaML" value="11.5" step="0.1"></label>
-            <label>Taxa fixa (R$): <input type="number" id="fixoML" value="5.00" step="0.01"></label>
+            <label>Comissão (%): <input type="number" id="taxaML" value="11.5" step="0.1" inputmode="decimal"></label>
+            <label>Taxa fixa (R$): <input type="number" id="fixoML" value="6.00" step="0.01" inputmode="decimal"></label>
           </div>
           <div>
             <strong>🟠 Shopee</strong>
-            <label>Comissão (%): <input type="number" id="taxaShopee" value="12" step="0.1"></label>
-            <label>Taxa fixa (R$): <input type="number" id="fixoShopee" value="4.00" step="0.01"></label>
+            <label>Comissão (%): <input type="number" id="taxaShopee" value="12" step="0.1" inputmode="decimal"></label>
+            <label>Taxa fixa (R$): <input type="number" id="fixoShopee" value="4.00" step="0.01" inputmode="decimal"></label>
           </div>
         </div>
       </div>
@@ -116,7 +117,7 @@
           </div>
         </div>
         <button id="salvarHistoricoBtn" class="btn-secundario">💾 Salvar no histórico</button>
-        <p id="msgSalvo" class="msg-salvo oculto">✅ Salvo com sucesso!</p>
+        <div id="feedbackMsg" class="feedback-msg oculto">✅ Salvo com sucesso!</div>
       </div>
     </section>
 
@@ -129,18 +130,18 @@
 
       <div class="card">
         <h2>📦 Seus Custos</h2>
-        <label>Custo do filamento por peça (R$): <input type="number" id="revCustoFilamento" value="2.20" step="0.01"></label>
-        <label>Custo de energia por peça (R$): <input type="number" id="revCustoEnergia" value="0.50" step="0.01"></label>
-        <label>Tempo de produção (minutos): <input type="number" id="revTempoProducao" value="60" step="1"></label>
+        <label>Custo do filamento por peça (R$): <input type="number" id="revCustoFilamento" value="2.20" step="0.01" inputmode="decimal"></label>
+        <label>Custo de energia por peça (R$): <input type="number" id="revCustoEnergia" value="0.50" step="0.01" inputmode="decimal"></label>
+        <label>Tempo de produção (minutos): <input type="number" id="revTempoProducao" value="60" step="1" inputmode="numeric"></label>
       </div>
 
       <div class="card">
         <h2>🏷️ Preço de Mercado</h2>
-        <label>Preço de venda observado (R$): <input type="number" id="revPrecoVenda" value="29.90" step="0.01"></label>
+        <label>Preço de venda observado (R$): <input type="number" id="revPrecoVenda" value="29.90" step="0.01" inputmode="decimal"></label>
         <label>Canal de venda:
           <select id="revCanal">
             <option value="direta">Venda Direta (sem taxas)</option>
-            <option value="ml">Mercado Livre (11,5% + R$ 5,00)</option>
+            <option value="ml">Mercado Livre (11,5% + R$ 6,00)</option>
             <option value="shopee">Shopee (12% + R$ 4,00)</option>
           </select>
         </label>
@@ -171,7 +172,7 @@
           </div>
         </div>
         <button id="salvarReversoBtn" class="btn-secundario">💾 Salvar no histórico</button>
-        <p id="msgSalvoReverso" class="msg-salvo oculto">✅ Salvo com sucesso!</p>
+        <div id="feedbackReversoMsg" class="feedback-msg oculto">✅ Salvo com sucesso!</div>
       </div>
     </section>
 
@@ -190,7 +191,7 @@
   <footer class="footer">
     <div class="footer-content">
       <span>&copy; 2026 <strong>IHC Solutions</strong></span>
-      <span class="versao">V 5.1</span>
+      <span class="versao">V 5.2</span>
     </div>
     <div class="footer-links">
       <a href="privacidade.html">Política de Privacidade</a>
