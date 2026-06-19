@@ -128,13 +128,6 @@
       </div>
 
       <div class="card">
-        <h2>📦 Seus Custos</h2>
-        <label>Custo do filamento por peça (R$) <span class="tooltip" data-tip="Quanto de filamento é usado em cada peça, em reais. Use a calculadora normal para descobrir">?</span>: <input type="number" id="revCustoFilamento" value="2.20" step="0.01" inputmode="decimal"></label>
-        <label>Custo de energia por peça (R$) <span class="tooltip" data-tip="Quanto de energia elétrica é gasto por peça, em reais">?</span>: <input type="number" id="revCustoEnergia" value="0.50" step="0.01" inputmode="decimal"></label>
-        <label>Tempo de produção (minutos) <span class="tooltip" data-tip="Quanto tempo leva para imprimir uma unidade? Use para calcular seu ganho por hora">?</span>: <input type="number" id="revTempoProducao" value="60" step="1" inputmode="numeric"></label>
-      </div>
-
-      <div class="card">
         <h2>🏷️ Preço de Mercado</h2>
         <label>Preço de venda observado (R$) <span class="tooltip" data-tip="Qual o preço que estão cobrando por essa peça no marketplace?">?</span>: <input type="number" id="revPrecoVenda" value="29.90" step="0.01" inputmode="decimal"></label>
         <label>Canal de venda:
@@ -144,6 +137,13 @@
             <option value="shopee">Shopee (12% + R$ 4,00)</option>
           </select>
         </label>
+      </div>
+
+      <div class="card">
+        <h2>📦 Seus Custos</h2>
+        <label>Custo do filamento por peça (R$) <span class="tooltip" data-tip="Quanto de filamento é usado em cada peça, em reais. Use a calculadora normal para descobrir">?</span>: <input type="number" id="revCustoFilamento" value="2.20" step="0.01" inputmode="decimal"></label>
+        <label>Custo de energia por peça (R$) <span class="tooltip" data-tip="Quanto de energia elétrica é gasto por peça, em reais">?</span>: <input type="number" id="revCustoEnergia" value="0.50" step="0.01" inputmode="decimal"></label>
+        <label>Tempo de produção (minutos) <span class="tooltip" data-tip="Quanto tempo leva para imprimir uma unidade? Use para calcular seu ganho por hora">?</span>: <input type="number" id="revTempoProducao" value="60" step="1" inputmode="numeric"></label>
       </div>
 
       <button id="calcularReversoBtn">🔄 Calcular Viabilidade</button>
