@@ -420,4 +420,67 @@ function renderizarHistorico() {
         </div>
         <div class="historico-acoes">
           <button onclick="carregarDeHistorico(${idx})">📂 Carregar</button>
-          <button class="btn-perigo" onclick="excluirDoHistorico
+          <button class="btn-perigo" onclick="excluirDoHistorico(${idx})">❌</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.carregarDeHistorico = function(index) {
+  const historico = carregarHistorico();
+  const item = historico[index];
+  if (!item || item.tipo !== 'calculo') return;
+
+  document.getElementById('nomeProduto').value = item.nome;
+  document.getElementById('peso').value = item.peso;
+  document.getElementById('desperdicio').value = item.desperdicio * 100;
+  document.getElementById('precoFilamento').value = item.precoFilamento;
+  document.getElementById('precoKwh').value = item.precoKwh;
+  document.getElementById('potenciaPico').value = item.pico;
+  document.getElementById('duracaoPico').value = item.duracaoPico;
+  document.getElementById('potenciaSustentada').value = item.sustentada;
+
+  modoSelect.value = item.modo;
+  document.getElementById('tempoIndividualH').value = item.tempoIndividualH || '';
+  document.getElementById('tempoIndividualM').value = item.tempoIndividualM || '';
+  if (item.modo === 'lote') {
+    document.getElementById('qtdLote').value = item.qtdLote || 2;
+    document.getElementById('tempoLoteTotalH').value = item.tempoLoteTotalH || '';
+    document.getElementById('tempoLoteTotalM').value = item.tempoLoteTotalM || '';
+  }
+  atualizarCamposTempo();
+  if (item.modo === 'lote') calcularTempoMedioLote();
+
+  document.getElementById('margemLucro').value = item.margem * 100;
+  document.getElementById('taxaML').value = item.canais[1].taxaPercent * 100;
+  document.getElementById('fixoML').value = item.canais[1].taxaFixa;
+  document.getElementById('taxaShopee').value = item.canais[2].taxaPercent * 100;
+  document.getElementById('fixoShopee').value = item.canais[2].taxaFixa;
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="calc"]').classList.add('active');
+  document.getElementById('calc-tab').classList.add('active');
+  document.getElementById('reverso-tab').classList.remove('active');
+  document.getElementById('history-tab').classList.remove('active');
+
+  document.getElementById('calcularBtn').click();
+};
+
+window.excluirDoHistorico = function(index) {
+  if (confirm('Excluir este registro do histórico?')) {
+    const historico = carregarHistorico();
+    historico.splice(index, 1);
+    localStorage.setItem('calc3d_historico', JSON.stringify(historico));
+    renderizarHistorico();
+  }
+};
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/3dcalculator/sw.js')
+      .then(reg => console.log('SW registrado com escopo:', reg.scope))
+      .catch(err => console.log('Erro no SW:', err));
+  });
+}
