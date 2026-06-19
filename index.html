@@ -26,23 +26,23 @@
     <section id="calc-tab" class="tab-content active">
       <div class="card">
         <h2>📦 Produto & Filamento</h2>
-        <label>Nome do produto: <input type="text" id="nomeProduto" placeholder="Ex: Suporte para celular"></label>
-        <label>Peso da peça (g): <input type="number" id="peso" value="50" step="0.1" inputmode="decimal"></label>
-        <label>Desperdício (%): <input type="number" id="desperdicio" value="10" step="0.1" inputmode="decimal"></label>
-        <label>Preço do filamento (R$/kg): <input type="number" id="precoFilamento" value="80.00" step="0.01" inputmode="decimal"></label>
+        <label>Nome do produto <span class="tooltip" data-tip="Dê um nome para identificar este produto no histórico">?</span>: <input type="text" id="nomeProduto" placeholder="Ex: Suporte para celular"></label>
+        <label>Peso da peça (g) <span class="tooltip" data-tip="Peso da peça final em gramas. Pese a peça pronta com uma balança de precisão">?</span>: <input type="number" id="peso" value="50" step="0.1" inputmode="decimal"></label>
+        <label>Desperdício (%) <span class="tooltip" data-tip="Porcentagem de filamento perdido (purga, torre, falhas). Recomenda-se 10%">?</span>: <input type="number" id="desperdicio" value="10" step="0.1" inputmode="decimal"></label>
+        <label>Preço do filamento (R$/kg) <span class="tooltip" data-tip="Quanto você pagou no rolo de filamento. Ex: R$ 80,00 por 1kg de PETG">?</span>: <input type="number" id="precoFilamento" value="80.00" step="0.01" inputmode="decimal"></label>
       </div>
 
       <div class="card">
         <h2>⚡ Energia</h2>
-        <label>Preço do kWh (R$): <input type="number" id="precoKwh" value="0.93" step="0.01" inputmode="decimal"></label>
-        <label>Potência de pico (W): <input type="number" id="potenciaPico" value="1250" inputmode="numeric"></label>
-        <label>Duração do pico (min): <input type="number" id="duracaoPico" value="10" inputmode="numeric"></label>
-        <label>Potência sustentada (W): <input type="number" id="potenciaSustentada" value="200" inputmode="numeric"></label>
+        <label>Preço do kWh (R$) <span class="tooltip" data-tip="Valor total da sua conta de luz dividido pelo consumo. Inclui TUSD, TE e impostos">?</span>: <input type="number" id="precoKwh" value="0.93" step="0.01" inputmode="decimal"></label>
+        <label>Potência de pico (W) <span class="tooltip" data-tip="Potência máxima da sua impressora durante o aquecimento. Padrão: 1250W para Creality">?</span>: <input type="number" id="potenciaPico" value="1250" inputmode="numeric"></label>
+        <label>Duração do pico (min) <span class="tooltip" data-tip="Tempo que a impressora leva para aquecer a mesa e o bico. Geralmente 10 minutos">?</span>: <input type="number" id="duracaoPico" value="10" inputmode="numeric"></label>
+        <label>Potência sustentada (W) <span class="tooltip" data-tip="Potência média durante a impressão. Para impressoras FDM, cerca de 200W">?</span>: <input type="number" id="potenciaSustentada" value="200" inputmode="numeric"></label>
       </div>
 
       <div class="card">
         <h2>⏱️ Tempos de Impressão</h2>
-        <label>Modo de produção:
+        <label>Modo de produção <span class="tooltip" data-tip="Individual: uma peça por vez. Lote: várias peças na mesa, rateia o custo de energia">?</span>:
           <select id="modoProducao">
             <option value="individual">Individual (uma peça por vez)</option>
             <option value="lote">Em lote (várias peças juntas)</option>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div id="tempoLoteContainer" style="display:none;">
-          <label>Quantidade de peças no lote: <input type="number" id="qtdLote" value="4" min="2" inputmode="numeric"></label>
+          <label>Quantidade de peças no lote <span class="tooltip" data-tip="Quantas peças cabem na mesa de uma vez? Informe o número total">?</span>: <input type="number" id="qtdLote" value="4" min="2" inputmode="numeric"></label>
           <label>Tempo total do lote:</label>
           <div class="tempo-duplo">
             <input type="number" id="tempoLoteTotalH" placeholder="0" min="0" class="tempo-hora" inputmode="numeric">
@@ -72,7 +72,7 @@
 
       <div class="card">
         <h2>💰 Precificação</h2>
-        <label>Margem de lucro (%): <input type="number" id="margemLucro" value="50" step="1" inputmode="decimal"></label>
+        <label>Margem de lucro (%) <span class="tooltip" data-tip="Porcentagem que você quer ganhar sobre o custo total. 50% é um bom ponto de partida">?</span>: <input type="number" id="margemLucro" value="50" step="1" inputmode="decimal"></label>
         <h3>Taxas dos canais</h3>
         <p class="info-taxas">✅ Taxas reais atualizadas (Junho 2026)</p>
         <div class="taxas-grid">
@@ -130,14 +130,14 @@
 
       <div class="card">
         <h2>📦 Seus Custos</h2>
-        <label>Custo do filamento por peça (R$): <input type="number" id="revCustoFilamento" value="2.20" step="0.01" inputmode="decimal"></label>
-        <label>Custo de energia por peça (R$): <input type="number" id="revCustoEnergia" value="0.50" step="0.01" inputmode="decimal"></label>
-        <label>Tempo de produção (minutos): <input type="number" id="revTempoProducao" value="60" step="1" inputmode="numeric"></label>
+        <label>Custo do filamento por peça (R$) <span class="tooltip" data-tip="Quanto de filamento é usado em cada peça, em reais. Use a calculadora normal para descobrir">?</span>: <input type="number" id="revCustoFilamento" value="2.20" step="0.01" inputmode="decimal"></label>
+        <label>Custo de energia por peça (R$) <span class="tooltip" data-tip="Quanto de energia elétrica é gasto por peça, em reais">?</span>: <input type="number" id="revCustoEnergia" value="0.50" step="0.01" inputmode="decimal"></label>
+        <label>Tempo de produção (minutos) <span class="tooltip" data-tip="Quanto tempo leva para imprimir uma unidade? Use para calcular seu ganho por hora">?</span>: <input type="number" id="revTempoProducao" value="60" step="1" inputmode="numeric"></label>
       </div>
 
       <div class="card">
         <h2>🏷️ Preço de Mercado</h2>
-        <label>Preço de venda observado (R$): <input type="number" id="revPrecoVenda" value="29.90" step="0.01" inputmode="decimal"></label>
+        <label>Preço de venda observado (R$) <span class="tooltip" data-tip="Qual o preço que estão cobrando por essa peça no marketplace?">?</span>: <input type="number" id="revPrecoVenda" value="29.90" step="0.01" inputmode="decimal"></label>
         <label>Canal de venda:
           <select id="revCanal">
             <option value="direta">Venda Direta (sem taxas)</option>
@@ -183,7 +183,10 @@
         <div id="historicoLista">
           <p class="historico-vazio">📋 Nenhum cálculo salvo ainda.<br><small>Faça um cálculo e clique em "Salvar no histórico".</small></p>
         </div>
-        <button id="limparHistoricoBtn" class="btn-perigo">🗑️ Limpar histórico</button>
+        <div class="historico-acoes-topo">
+          <button id="exportarCsvBtn" class="btn-secundario btn-exportar">📥 Exportar CSV</button>
+          <button id="limparHistoricoBtn" class="btn-perigo">🗑️ Limpar histórico</button>
+        </div>
       </div>
     </section>
   </div>
@@ -191,7 +194,7 @@
   <footer class="footer">
     <div class="footer-content">
       <span>&copy; 2026 <strong>IHC Solutions</strong></span>
-      <span class="versao">V 5.2</span>
+      <span class="versao">V 5.3</span>
     </div>
     <div class="footer-links">
       <a href="privacidade.html">Política de Privacidade</a>
