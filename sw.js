@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calc3d-v5.1';
+const CACHE_NAME = 'calc3d-v5.3';
 const urlsToCache = [
   '/3dcalculator/',
   '/3dcalculator/index.html',
