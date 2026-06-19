@@ -57,6 +57,25 @@ function desabilitarBotao(botao, duracao = 2000) {
   }, duracao);
 }
 
+// ---------- TOOLTIPS ----------
+document.querySelectorAll('.tooltip').forEach(tooltip => {
+  tooltip.addEventListener('click', function(e) {
+    e.stopPropagation();
+    // Fecha outros tooltips abertos
+    document.querySelectorAll('.tooltip-ativo').forEach(t => {
+      if (t !== this) t.classList.remove('tooltip-ativo');
+    });
+    this.classList.toggle('tooltip-ativo');
+  });
+});
+
+// Fecha tooltip ao clicar fora
+document.addEventListener('click', () => {
+  document.querySelectorAll('.tooltip-ativo').forEach(t => {
+    t.classList.remove('tooltip-ativo');
+  });
+});
+
 // ---------- INTERFACE DE ABAS ----------
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -81,6 +100,10 @@ function salvarHistorico(registro) {
 
 function carregarHistorico() {
   return JSON.parse(localStorage.getItem('calc3d_historico') || '[]');
+}
+
+function atualizarHistorico(historico) {
+  localStorage.setItem('calc3d_historico', JSON.stringify(historico));
 }
 
 function limparHistorico() {
@@ -255,7 +278,6 @@ document.getElementById('calcularBtn').addEventListener('click', function() {
   }, 300);
 });
 
-// Salvar no histórico - Calculadora
 document.getElementById('salvarHistoricoBtn').addEventListener('click', function() {
   if (window._ultimoCalculo && window._ultimoCalculo.tipo === 'calculo') {
     desabilitarBotao(this);
@@ -360,7 +382,6 @@ document.getElementById('calcularReversoBtn').addEventListener('click', function
   }, 300);
 });
 
-// Salvar no histórico - Reverso
 document.getElementById('salvarReversoBtn').addEventListener('click', function() {
   if (window._ultimoCalculoReverso && window._ultimoCalculoReverso.tipo === 'reverso') {
     desabilitarBotao(this);
@@ -382,6 +403,33 @@ document.getElementById('limparHistoricoBtn').addEventListener('click', () => {
     limparHistorico();
     renderizarHistorico();
   }
+});
+
+// Exportar CSV
+document.getElementById('exportarCsvBtn').addEventListener('click', () => {
+  const historico = carregarHistorico();
+  if (historico.length === 0) {
+    alert('Nenhum dado no histórico para exportar.');
+    return;
+  }
+
+  let csv = 'Tipo,Nome,Data,Custo Total,Preço Venda Direta,Preço ML,Preço Shopee,Lucro,Margem\n';
+  
+  historico.forEach(item => {
+    if (item.tipo === 'calculo') {
+      csv += `Cálculo,"${item.nome}","${item.data}",${item.custoTotalPeca},${item.precos[0].preco},${item.precos[1].preco},${item.precos[2].preco},,\n`;
+    } else if (item.tipo === 'reverso') {
+      csv += `Reverso,"Análise de Viabilidade","${item.data}",${item.custoTotal},,,,${item.lucro},${item.margemLucro}\n`;
+    }
+  });
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = '3d-calculator-pro-historico.csv';
+  link.click();
+  URL.revokeObjectURL(url);
 });
 
 function renderizarHistorico() {
@@ -412,7 +460,9 @@ function renderizarHistorico() {
       <div class="historico-item">
         <div class="historico-info">
           <span class="badge-tipo calculo-badge">🧮 Cálculo</span>
-          <strong>${item.nome}</strong> (${item.data})<br>
+          <strong class="nome-historico" data-index="${idx}">${item.nome}</strong>
+          <button class="btn-editar-nome" onclick="editarNomeHistorico(${idx}, this)" title="Editar nome">✏️</button>
+          (${item.data})<br>
           Custo: R$ ${formatarMoeda(item.custoTotalPeca)} |
           Venda Direta: R$ ${formatarMoeda(item.precos[0].preco)} |
           ML: R$ ${formatarMoeda(item.precos[1].preco)} |
@@ -426,6 +476,44 @@ function renderizarHistorico() {
     `;
   }).join('');
 }
+
+// Editar nome no histórico
+window.editarNomeHistorico = function(index, botao) {
+  const historico = carregarHistorico();
+  const item = historico[index];
+  if (!item || item.tipo !== 'calculo') return;
+
+  const nomeEl = botao.parentElement.querySelector('.nome-historico');
+  const nomeAtual = item.nome;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = nomeAtual;
+  input.className = 'input-editar-nome';
+  input.style.cssText = 'width: 150px; padding: 4px 8px; margin-right: 4px; font-size: 0.9rem;';
+
+  nomeEl.replaceWith(input);
+  input.focus();
+  input.select();
+
+  const salvarEdicao = () => {
+    const novoNome = input.value.trim() || 'Sem nome';
+    item.nome = novoNome;
+    atualizarHistorico(historico);
+    renderizarHistorico();
+  };
+
+  input.addEventListener('blur', salvarEdicao);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      input.blur();
+    }
+    if (e.key === 'Escape') {
+      input.value = nomeAtual;
+      input.blur();
+    }
+  });
+};
 
 window.carregarDeHistorico = function(index) {
   const historico = carregarHistorico();
